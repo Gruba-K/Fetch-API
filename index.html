@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch API</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <style>
+        #op{
+            background-color:azure;
+            color:blueviolet;
+            font-family:cursive;
+            font-style:oblique;
+            border:1px dashed blueviolet;
+            
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <button id="getText" class="btn btn-primary mx-2 my-3">Get Text</button>
+        <button id="getJson" class="btn btn-warning mx-2 my-3">Get Json</button>
+        <button id="getApi" class="btn btn-success mx-2 my-3">Get API</button>
+        <button class="btn btn-danger mx-2 my-3" onclick="index()" id="but">BACK</button>
+    </div>
+    <div class="container w-50 " id="in">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center">Click Above Buttons to get Data Async</h2>
+            </div>
+            <div class="card-text">
+                <ul class="list-group " >
+                    <li class="list-group-item">&#9642; &nbsp;Get Text- Gets data from local text file.</li>
+                    <li class="list-group-item">&#9642; &nbsp;Get Json - Gets data from local json file</li>
+                    <li class="list-group-item">&#9642; &nbsp;Get API - Gets data from Json Placeholder website.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="op" class="container d-none"></div>
+    <script>
+        
+        const gt = document.getElementById("getText");
+        const gj = document.getElementById("getJson");
+        const ga = document.getElementById('getApi');
+        const div = document.querySelector("#op");
+        const div2= document.getElementById("in");
+        const index = ()=>{
+            div.classList.add('d-none');
+            div2.classList.remove('d-none');
+            document.getElementById("but").classList.add('d-none');
+
+        };
+            gt.addEventListener('click',  ()=>{
+                document.getElementById("but").classList.remove('d-none');
+                fetch('./sample.txt')
+                .then((res)=>{
+                    return res.text();
+                })
+                .then((data)=>{
+                    div2.classList.add('d-none');
+                    div.classList.remove("d-none");
+                    div.innerHTML=data;
+                   
+                })
+            });
+        
+            gj.addEventListener('click',async ()=>{
+            document.getElementById("but").classList.remove('d-none');
+            div2.classList.add('d-none');
+            const res = await fetch('./sampleJson.json');
+            const data = await res.json();
+            div.classList.remove('d-none');
+           div.innerHTML=data["person"].map((x)=>{
+                return ("The Name of the Person is <b>"+ x.Name+"</b><br>");
+                
+            }).join('');
+           
+            
+        }); 
+
+            ga.addEventListener('click',async ()=>{
+                document.getElementById("but").classList.remove('d-none');
+                div2.classList.add('d-none');
+                const res = await fetch(`https://jsonplaceholder.typicode.com/todos`);
+                const data = await res.json();
+                div.classList.remove("d-none");
+                div.innerHTML=data.map((x)=>{
+                    return (
+                        `<div class="card my-4">
+                            <div class="card-body">
+                                <div clas="card-title">
+                                    <b>Title: </b>${x.title}
+                                </div>
+                                <div class="card-text">
+                                    <b>Completed: </b>${x.completed}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        `
+                    );
+                }).join('')
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+    "person":[
+        {
+            "id":"1",
+            "Name":"Gruba"
+        },
+        {
+            "id":"2",
+            "Name":"Naveen"
+        },
+        {
+            "id":"3",
+            "Name":"Nivas"
+        }
+
+    ]
+}
